@@ -18,6 +18,19 @@ export const store = new Vuex.Store({
     },
     CHANGE_VISIBILITY (state, newVisibilityValue) {
       state.visibility = newVisibilityValue
+    },
+    DEL_TODO (state, index) {
+      state.todos.splice(index, 1)
+    },
+    STATUS_TODO (state, index) {
+      state.todos[index].completed = !state.todos[index].completed
+    },
+    CLEAR_TODO (state) {
+      for (let i = state.todos.length - 1; i >= 0; i--) {
+        if (state.todos[i].completed) {
+          state.todos.splice(i, 1)
+        }
+      }
     }
   },
   actions: {
@@ -26,6 +39,15 @@ export const store = new Vuex.Store({
     },
     changeVisibility ({commit}, newVisibilityValue) {
       commit('CHANGE_VISIBILITY', newVisibilityValue)
+    },
+    delTodo ({commit}, index) {
+      commit('DEL_TODO', index)
+    },
+    statusTodo ({commit}, index) {
+      commit('STATUS_TODO', index)
+    },
+    clearTodo ({commit}) {
+      commit('CLEAR_TODO')
     }
   },
   getters: {
