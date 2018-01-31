@@ -31,23 +31,43 @@ export const store = new Vuex.Store({
           state.todos.splice(i, 1)
         }
       }
+    },
+    SET_TODOS (state, todos) {
+      state.todos = todos
+    },
+    SORT_TABLE (state, index) {
+      state.todos.splice(index.newIndex, 0, state.todos.splice(index.oldIndex, 1)[0])
     }
   },
   actions: {
-    addTodo ({commit}, title) {
+    addTodo ({commit, dispatch}, title) {
       commit('ADD_TODO', title)
+      dispatch('saveStorage')
     },
     changeVisibility ({commit}, newVisibilityValue) {
       commit('CHANGE_VISIBILITY', newVisibilityValue)
     },
-    delTodo ({commit}, index) {
+    delTodo ({commit, dispatch}, index) {
       commit('DEL_TODO', index)
+      dispatch('saveStorage')
     },
-    statusTodo ({commit}, index) {
+    statusTodo ({commit, dispatch}, index) {
       commit('STATUS_TODO', index)
+      dispatch('saveStorage')
     },
-    clearTodo ({commit}) {
+    clearTodo ({commit, dispatch}) {
       commit('CLEAR_TODO')
+      dispatch('saveStorage')
+    },
+    saveStorage ({state}) {
+      localStorage.setItem('todos', JSON.stringify(state.todos))
+    },
+    setTodos ({commit}, todos) {
+      commit('SET_TODOS', todos)
+    },
+    sortTable ({commit, dispatch}, index) {
+      commit('SORT_TABLE', index)
+      dispatch('saveStorage')
     }
   },
   getters: {
